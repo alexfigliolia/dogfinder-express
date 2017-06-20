@@ -1,0 +1,122 @@
+html,
+body{
+	overflow-x: hidden;
+	font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+}
+.no-scroll {
+	overflow: hidden;
+}
+
+.banner {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+ 	background: url('dog.jpg') no-repeat 80% 50%;
+ 	// background: #fff;
+ 	background-size: cover;
+ 	@include center;
+ 	position: relative;
+ 	overflow: hidden;
+ 	transition-duration: 0.5s;
+ 	font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+ 	&>.center {
+ 		display: none;
+ 		@media #{$mq-800} {
+ 			z-index: 3;
+	 		margin-right: auto;
+	 		margin-left: 2.5%;
+	 		@include center;
+	 		flex-direction: column;
+	 		max-width: 500px;
+	 		margin-top: -5vh;
+	 	}
+	 	@media #{$mq-957} {
+	 		margin-left: 10%;
+	 	}
+	 	&>h2 {
+	 		font-size: 7vh;
+	 		font-weight: 200;
+	 		margin-bottom: 0.25em;
+	 		text-align: center;
+	 		color: #000;
+	 	}
+ 		&>button {
+	 		width: 180px;
+	 		height: 50px;
+	 		color: #fff;
+	 		outline: none;
+	 		background: #279FF6;
+	 		border: none;
+	 		border-radius: 2px;
+	 		box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	 		text-transform: uppercase;
+	 		font-weight: 100;
+	 		margin-top: 150px;
+	 		font-size: 1.2em;
+	 		transition-duration: 0.25s;
+	 		position: relative;
+	 		overflow: hidden;
+	 		@media #{$mq-800} {
+		 		margin-top: 0.25em;
+		 	}
+		 	&::after {
+		 		content: "FIND A DOG";
+		 		position: absolute;
+		 		top: 0;
+		 		left: 0;
+		 		width: 100%;
+		 		height: 100%;
+		 		color: #fff;
+		 		background:  #2391E3;
+		 		@include center;
+		 		transform: translateY(-100%);
+		 		transition-duration: 0.25s;
+		 		transition-timing-function: ease;
+		 	}
+		 	&::before {
+		 		content: "FIND A DOG";
+		 		position: absolute;
+		 		top: 0;
+		 		left: 0;
+		 		width: 100%;
+		 		height: 100%;
+		 		color: #fff;
+		 		background:  #279FF6;
+		 		@include center;
+		 		transform: translateY(0%);
+		 		transition-duration: 0.25s;
+		 		transition-timing-function: ease;
+		 	}
+		 	&:hover {
+		 		transform: scale(1.025);
+		 		box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+		 	}
+		 	&:hover::after {
+		 		transform: translateY(0%);
+		 	}
+		 	&:hover::before {
+		 		transform: translateY(100%);
+		 	}
+	 	}
+ 	}
+}
+.banner-hide {
+	transform: translateY(-100%);
+}
+.bottom {
+	cursor: pointer;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 50px;
+	width: 100%;
+	background: #279FF6;
+	color: #fff;
+	@include center;
+	font-size: 1.25em;
+	box-shadow: 0 -14px 28px rgba(0,0,0,0.25), 0 -10px -10px rgba(0,0,0,0.22);
+	@media #{$mq-800}{
+		display: none;
+	}
+}
