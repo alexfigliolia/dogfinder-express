@@ -89,7 +89,7 @@ class App extends Component {
       if(err){
         console.log(err.reason);
         if(err.reason === 'Incorrect password') {
-          console.log('indicate to user that password is wrong');
+          document.getElementById('p').placeholder = "Incorrect Password";
         }
         if(err.reason === 'User not found') {
           Accounts.createUser({email: e, password: p}, (err) => {
@@ -112,10 +112,10 @@ class App extends Component {
           });
         }
       } else {
-          console.log('get the dogs they saved');
           this.setState({
             loggedIn: true
           })
+          this.updateDogs();
       }
     });
   }

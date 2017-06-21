@@ -24,7 +24,7 @@ class Cart extends Component {
               <div>
                 <h1>Login</h1>
                 <input ref='email' type='email' placeholder="Email" />
-                <input ref='password' type='password' placeholder="Password" />
+                <input id="p" ref='password' type='password' placeholder="Password" />
                 <div className='bc'>
                   <button onClick={this.props.cartToggle}>Back</button>
                   <button onClick={this.validate.bind(this)} className="login-button">Login</button>
