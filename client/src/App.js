@@ -50,8 +50,7 @@ class App extends Component {
       errorClasses : "error",
       data : [],
       users: this.getUserData(),
-      loggedIn: false,
-      dogstuff: this.getDogData()
+      loggedIn: false
     }
   }
 
@@ -67,14 +66,10 @@ class App extends Component {
         console.log('must login');
       }
     });
-    return { isAuthenticated: Meteor.userId() !== null };
-  }
-
-  getDogData(){
-    var self = this;
     Meteor.subscribe('dogs' ,function(){
       self.updateDogs();
     });
+    return { isAuthenticated: Meteor.userId() !== null };
   }
 
   updateDogs(){
@@ -195,14 +190,63 @@ class App extends Component {
         }
       });
     }
- }
+  }
 
   componentDidMount(){
+    var self = this;
     window.addEventListener("resize", resize);
     resize();
+    history.pushState({page: "home"}, null, '/Home');
+    window.addEventListener('popstate', function(e) {
+      console.log(e.state.page);
+      if(e.state.page === "home") {
+        self.setState({
+          listClasses : "result-list",
+          bannerClasses : "banner",
+          searchToggle : true,
+          searchClasses : "search",
+          iconClasses : "search-icon search-icon-animate",
+          backClasses : "back-to-results",
+          back2Classes : "back2",
+          listingClasses : "listing",
+          compareToggle : true,
+          compareClasses : "compare",
+          loaderClasses : "loader"
+        });
+      } else if(e.state.page === "compare") {
+        self.setState({
+          compareToggle : false,
+          compareClasses : "compare compare-show",
+          iconClasses : "search-icon search-icon-animate search-icon-hide",
+          backClasses : "back-to-results",
+          back2Classes : "back2 back-to-results-show"
+        });
+      } else if(e.state.page === "results") {
+        self.setState({
+          listClasses : "result-list results-list-show",
+          bannerClasses : "banner banner-hide",
+          loaderClasses : "loader loader-hide",
+          compareToggle : true,
+          compareClasses : "compare",
+          iconClasses : "search-icon search-icon-animate",
+          backClasses : "back-to-results",
+          back2Classes : "back2",
+          listingClasses : "listing"
+        });
+      } else {
+        self.setState({
+          listingClasses : "listing listing-show",
+          compareClasses : "compare",
+          iconClasses : "search-icon search-icon-animate search-icon-hide",
+          backClasses : "back-to-results back-to-results-show",
+          listClasses : "result-list results-list-show results-list-hide",
+        });
+      }
+    });
   }
 
   goHome(){
+    history.pushState({page: "home"}, null, '/Home');
     this.setState({
       listClasses : "result-list",
       bannerClasses : "banner",
@@ -290,6 +334,7 @@ class App extends Component {
           });
           document.body.scrollTop = 0;
         }.bind(this), 750);
+        history.pushState({page: "compare"}, null, '/Compare');
 
     } else if(this.state.compareToggle === true 
     && this.state.listClasses === "result-list"){
@@ -311,6 +356,7 @@ class App extends Component {
         setTimeout(function(){
           document.body.scrollTop = 0;
         }, 750);
+        history.pushState({page: "compare"}, null, '/Compare');
 
     } else if(this.state.compareToggle === true 
     && this.state.listClasses === "result-list results-list-show results-list-hide"){
@@ -332,6 +378,7 @@ class App extends Component {
         setTimeout(function(){
           document.body.scrollTop = 0;
         }, 750);
+        history.pushState({page: "compare"}, null, '/Compare');
 
     } else if( this.state.compareToggle === false 
     && this.state.listClasses === "result-list results-list-show results-list-hide" 
@@ -346,6 +393,7 @@ class App extends Component {
           back2Classes : "back2"
         });
         document.body.scrollTop = sc;
+        history.pushState({page: "results"}, null, '/Search-Results');
 
     } else if( this.state.compareToggle === false 
     && this.state.listClasses === "result-list results-list-show results-list-hide" ) {
@@ -359,6 +407,7 @@ class App extends Component {
           back2Classes : "back2"
         });
         document.body.scrollTop = sc;
+        history.pushState({page: "results"}, null, '/Search-Results');
     } else if( this.state.compareToggle === false 
     && this.state.listClasses === "result-list" ) {
         
@@ -371,6 +420,7 @@ class App extends Component {
 
         });
         document.body.scrollTop = sc;
+        history.pushState({page: "home"}, null, '/Home');
     }
   }
 
@@ -403,6 +453,7 @@ class App extends Component {
       document.getElementById('sd').innerHTML = 'Save to Cart';
       document.getElementById('sd').classList.remove('save-dog-animate');
     }, 500);
+    history.pushState({page: "results"}, null, '/Search-Results');
   }
 
   showDog(e){
@@ -463,6 +514,7 @@ class App extends Component {
           listClasses : "result-list results-list-show results-list-hide",
           scrollPos : sc
         });
+        history.pushState({page: dog[0]}, null, '/'+dog[0]);
       }
       if(e.target.className === 'image' || e.target.className === 'name') {
         index = e.target.parentNode.dataset.index;
@@ -517,11 +569,13 @@ class App extends Component {
           listClasses : "result-list results-list-show results-list-hide",
           scrollPos : sc
         });
+        history.pushState({page: dog[0]}, null, '/'+dog[0]);
       }
     }
   }
 
   getDogs(){
+    history.pushState({page: "results"}, null, '/Results');
     document.body.scrollTop = 0;
     var self = this;
     self.setState({
