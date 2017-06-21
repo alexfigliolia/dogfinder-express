@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      zip : "2",
+      zip : "",
       breed : "",
       gender : "",
       age : "",
