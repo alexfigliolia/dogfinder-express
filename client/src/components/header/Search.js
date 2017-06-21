@@ -134,7 +134,7 @@ class Search extends Component {
               ref='breed' 
               type='text' 
               placeholder="Breed" 
-              onKeyUp={this.autocomplete.bind(this)}
+              onChange={this.autocomplete.bind(this)}
               onFocus={this.handleBreedFocus.bind(this)} />
             {
               this.state.searchComplete.map((dog, i) => {
@@ -174,5 +174,3 @@ class Search extends Component {
 }
 
 export default Search;
-
-//{this.props.search}
