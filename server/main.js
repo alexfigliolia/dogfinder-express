@@ -72,7 +72,6 @@ Meteor.methods({
     check(object, Object);
  
     Dogs.remove(object);
-    console.log(object);
   },
 
   'dogs.find'(id){
