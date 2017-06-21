@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import jsonp from 'jsonp';
 
 class Search extends Component {
   constructor(props){
@@ -9,9 +10,26 @@ class Search extends Component {
       "secondOptionClasses" : "options",
       "soc" : true,
       "age" : "Age",
-      "gender" :  "Gender"
+      "gender" :  "Gender",
+      "searchComplete" : []
     }
   }
+
+  handleBreed(e){
+    var b = e.target.dataset.val;
+    this.refs.breed.value = b;
+    this.setState({
+      searchComplete: []
+    });
+  }
+
+  handleBreedFocus(){
+    this.refs.breed.value = "";
+    this.setState({
+      searchComplete: []
+    });
+  }
+
   handleInputs(){
     var reg = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
     var zip = this.refs.zipcode.value;
@@ -71,13 +89,68 @@ class Search extends Component {
     }
   }
 
+  //IMPLEMENTATION OF AUTOCOMPLETE FOR DOG BREEDS
+  autocomplete(){
+    var input = this.refs.breed.value,
+        string = input.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),
+        matches = [],
+        self = this;
+    // setInterval(function(){
+      if(string !== '') {
+        jsonp('https://api.petfinder.com/breed.list?animal=dog&format=json&key=30ee8287679b46176ef7acfbfee70f33', null, function(err, data){
+          if(err) {
+            console.log(err);
+          } else {
+            var breeds = data.petfinder.breeds.breed;
+            for(var i = 0; i < breeds.length; i++) {
+                var b = breeds[i].$t;
+                if(b.toLowerCase().indexOf(string) === 0) {
+                  matches.unshift(b);
+                } 
+                if(b.toLowerCase().indexOf(string) !== 0 && b.toLowerCase().indexOf(string) !== -1) {
+                  matches.push(b);
+                }
+            }
+            self.setState({
+              searchComplete: matches
+            });
+          }
+        });
+      } else {
+        self.setState({
+          searchComplete: []
+        });
+      }
+    // }, 500); 
+  }
+
   render() {
     return (
       <div className={this.props.classes}>
         <div>
           <input ref='zipcode' placeholder="Zipcode" />
-          <input ref='breed' placeholder="Breed" />
-          <div className='select' ref='age' onClick={this.firstClicked.bind(this)} data-val="Age">{this.state.age}
+          <div className="breed-wrap">
+            <input 
+              ref='breed' 
+              type='text' 
+              placeholder="Breed" 
+              onKeyUp={this.autocomplete.bind(this)}
+              onFocus={this.handleBreedFocus.bind(this)} />
+            {
+              this.state.searchComplete.map((dog, i) => {
+                if(i < 5) {
+                  return (
+                    <div 
+                      key={dog}
+                      className="search-option" 
+                      data-val={dog}
+                      onClick={this.handleBreed.bind(this)}>{dog}</div>
+                  );
+                }
+              })
+            }
+          </div>
+          <div className='select select-1' ref='age' onClick={this.firstClicked.bind(this)} data-val="Age">{this.state.age}
             <div className={this.state.firstOptionClasses} >
               <div className='option' data-val="Age">Age</div> 
               <div className='option' data-val="Baby">Baby</div>
@@ -86,7 +159,7 @@ class Search extends Component {
               <div className='option' data-val="Senior">Senior</div>
             </div>
           </div>
-          <div className='select' ref='gender' onClick={this.secondClicked.bind(this)} data-val="Gender">{this.state.gender}
+          <div className='select select-2' ref='gender' onClick={this.secondClicked.bind(this)} data-val="Gender">{this.state.gender}
             <div className={this.state.secondOptionClasses}>
               <div className='option' data-val="Gender">Gender</div>
               <div className='option' data-val="M">Male</div>

@@ -53,8 +53,8 @@ class App extends Component {
       loggedIn: false
     }
   }
-
-   getUserData(){
+  //FETCH CURRENT USER
+  getUserData(){
     const self = this;
     Meteor.subscribe('userData', function(){
       if(Meteor.user() !== null) {
@@ -71,14 +71,14 @@ class App extends Component {
     });
     return { isAuthenticated: Meteor.userId() !== null };
   }
-
+  //FETCH SAVED DOGS FROM USER ID
   updateDogs(){
     var d = Dogs.find({owner: Meteor.userId()}).fetch();
     this.setState({
       data: d
     });
   }
-
+  //LOGIN OR CREATE USER
   login(e, p){
     Meteor.loginWithPassword(e, p, (err) => {
       if(err){
@@ -91,13 +91,11 @@ class App extends Component {
             if(err){
               console.log(err.reason);
             } else {
-              console.log('creating new user');
               Meteor.loginWithPassword(e, p, (err) => {
                 if(err) {
                   console.log(err.reason);
                 } else {
                   console.log(this.state.users);
-                  console.log('logging in new user');
                   this.setState({
                     loggedIn: true
                   })
@@ -114,7 +112,7 @@ class App extends Component {
       }
     });
   }
-  
+  //SAVE TO CART
   handleDogSubmit(e) {
     var self = this;
     if(self.state.loggedIn === false) {
@@ -167,12 +165,11 @@ class App extends Component {
       });
     }
   }
-
+  //DELETE FROM CART
   handleDogDelete(e) {
     if(e.target.className === 'remove-dog') {
       var id = e.target.dataset.id;
       var self = this;
-      console.log(id + " - " + Meteor.userId());
       Meteor.call('dogs.remove', { dogid: id, owner: Meteor.userId() }, function(err){
         if(err) {
           console.log(err);
@@ -186,7 +183,6 @@ class App extends Component {
               heartClasses : "heart"
             });
           }.bind(self), 700);
-
         }
       });
     }
@@ -194,8 +190,10 @@ class App extends Component {
 
   componentDidMount(){
     var self = this;
+    //RESIZE TO WINDOW SIZE
     window.addEventListener("resize", resize);
     resize();
+    //HISTORY API IMPLEMENTATION
     history.pushState({page: "home"}, null, '/Home');
     window.addEventListener('popstate', function(e) {
       console.log(e.state.page);
@@ -244,7 +242,7 @@ class App extends Component {
       }
     });
   }
-
+  //NAVIGATE TO HOME PAGE
   goHome(){
     history.pushState({page: "home"}, null, '/Home');
     this.setState({
@@ -266,7 +264,7 @@ class App extends Component {
       });
     }.bind(this), 600);
   }
-
+  //TOGGLE SEARCH COMPONENT
   searchToggle(){
     if(this.state.searchToggle === true) {
       this.setState({
@@ -285,7 +283,7 @@ class App extends Component {
       });
     }
   }
-
+  //TOGGLE CART COMPONENT
   cartToggle(){
     if(this.state.cartToggle === true){
       this.setState({
@@ -308,7 +306,7 @@ class App extends Component {
       });
     }
   }
-
+  //NAVIGATE TO COMPARE DOGS PAGE
   compareToggle(){
     var sc = this.state.scrollPos;
     if(this.state.compareToggle === true 
@@ -423,7 +421,7 @@ class App extends Component {
         history.pushState({page: "home"}, null, '/Home');
     }
   }
-
+  //NARROW SEARCH BY GIVEN CREDENTIALS
   narrowSearch(zip, breed, age, gender){
     this.setState({
       zip: zip,
@@ -432,12 +430,12 @@ class App extends Component {
       age : age
     }, this.transitionUI);
   }
-
+  //CLOSE SEARCH BAR AND NAVIGATE TO RESULTS PAGE
   transitionUI(){
     this.searchToggle();
     this.getDogs();
   }
-
+  //NAVIGATE FROM DOG LISTING PAGE TO RESULTS PAGE
   backToResults(){
     var sc = this.state.scrollPos;
     this.setState({
@@ -455,7 +453,7 @@ class App extends Component {
     }, 500);
     history.pushState({page: "results"}, null, '/Search-Results');
   }
-
+  //NAVIGATE TO INDIVIDUAL DOG LISTING PAGE
   showDog(e){
     if(e.target.className === 'dog' || e.target.className === 'image' || e.target.className === 'name' || e.target.tagName === 'IMG' || e.target.tagName === 'H3' || e.target.tagName === 'H2'){
       var index, dog, dogSize, breed, i, sc, email, phone, dogBreed = '';
@@ -573,7 +571,7 @@ class App extends Component {
       }
     }
   }
-
+  //SEARCH DOGS AND NAVIGATE TO RESULTS PAGE
   getDogs(){
     history.pushState({page: "results"}, null, '/Results');
     document.body.scrollTop = 0;
@@ -666,7 +664,7 @@ class App extends Component {
       }
     });
   }
-
+  //RETURN MORE RESULTS FROM SEARCH
   moreDogs(){
     var self = this;
     self.setState({
@@ -694,52 +692,60 @@ class App extends Component {
       } else {
         console.log(data.petfinder.pets);
         var d = self.state.dogs;
-        for (var i = 0; i < data.petfinder.pets.pet.length; i++) {
-          var a = [];
-          var image;
-          var name = data.petfinder.pets.pet[i].name.$t;
-          if(data.petfinder.pets.pet[i].media.photos !== undefined){
-            image = data.petfinder.pets.pet[i].media.photos.photo[2].$t;
-          } else {
-            image = 'no image';
-          }
-          var age = data.petfinder.pets.pet[i].age.$t;
-          var sex = data.petfinder.pets.pet[i].sex.$t;
-          var size = data.petfinder.pets.pet[i].size.$t;
-          var description = data.petfinder.pets.pet[i].description.$t;
-          var facts = [];
-          var breeds = [];
-          var contact = [];
-          var city = data.petfinder.pets.pet[i].contact.city.$t;
-          var state = data.petfinder.pets.pet[i].contact.state.$t;
-          var email = data.petfinder.pets.pet[i].contact.email.$t;
-          var phone = data.petfinder.pets.pet[i].contact.phone.$t;
-          if(data.petfinder.pets.pet[i].options.option !== undefined){
-            for(var h = 0; h < data.petfinder.pets.pet[i].options.option.length; h++){
-              var fact = data.petfinder.pets.pet[i].options.option[h].$t;
-              facts.push(fact);
+        if(data.petfinder.pets.pet !== undefined) {
+          for (var i = 0; i < data.petfinder.pets.pet.length; i++) {
+            var a = [];
+            var image;
+            var name = data.petfinder.pets.pet[i].name.$t;
+            if(data.petfinder.pets.pet[i].media.photos !== undefined){
+              image = data.petfinder.pets.pet[i].media.photos.photo[2].$t;
+            } else {
+              image = 'no image';
             }
+            var age = data.petfinder.pets.pet[i].age.$t;
+            var sex = data.petfinder.pets.pet[i].sex.$t;
+            var size = data.petfinder.pets.pet[i].size.$t;
+            var description = data.petfinder.pets.pet[i].description.$t;
+            var facts = [];
+            var breeds = [];
+            var contact = [];
+            var city = data.petfinder.pets.pet[i].contact.city.$t;
+            var state = data.petfinder.pets.pet[i].contact.state.$t;
+            var email = data.petfinder.pets.pet[i].contact.email.$t;
+            var phone = data.petfinder.pets.pet[i].contact.phone.$t;
+            if(data.petfinder.pets.pet[i].options.option !== undefined){
+              for(var h = 0; h < data.petfinder.pets.pet[i].options.option.length; h++){
+                var fact = data.petfinder.pets.pet[i].options.option[h].$t;
+                facts.push(fact);
+              }
+            }
+            for(var j = 0; j < data.petfinder.pets.pet[i].breeds.breed.length; j++){
+              var breed = data.petfinder.pets.pet[i].breeds.breed[j].$t;
+              breeds.push(breed);
+            }
+            if(sex === 'M') {
+              sex = 'Male';
+            } else if(sex === 'F') {
+              sex = 'Female';
+            } else {
+              sex = 'Unknown';
+            }
+            contact.push(city, state, email, phone);
+            a.push(name, image, sex, age, size, breeds, facts, description, sex, age, contact);
+            d.push(a);
           }
-          for(var j = 0; j < data.petfinder.pets.pet[i].breeds.breed.length; j++){
-            var breed = data.petfinder.pets.pet[i].breeds.breed[j].$t;
-            breeds.push(breed);
-          }
-          if(sex === 'M') {
-            sex = 'Male';
-          } else if(sex === 'F') {
-            sex = 'Female';
-          } else {
-            sex = 'Unknown';
-          }
-          contact.push(city, state, email, phone);
-          a.push(name, image, sex, age, size, breeds, facts, description, sex, age, contact);
-          d.push(a);
+          self.setState({
+            dogs : d,
+            loaderClasses : "loader loader-hide",
+            offset : offset + 24
+          });
+        } else {
+          self.setState({
+            errorClasses : "error error-show",
+            loaderClasses : "loader loader-hide",
+            offset : offset
+          });
         }
-        self.setState({
-          dogs : d,
-          loaderClasses : "loader loader-hide",
-          offset : offset + 24
-        });
       }
     });
   }
@@ -819,7 +825,7 @@ function resize(){
     document.getElementById("App").style.height = heights + "px";
     document.getElementById("App").style.width = widths + "px";
 }
-
+//TEST FOR LOCAL STORAGE
 function storageAvailable(type) {
     try {
         var storage = window[type],
