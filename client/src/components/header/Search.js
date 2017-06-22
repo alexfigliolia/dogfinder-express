@@ -138,17 +138,18 @@ class Search extends Component {
               onChange={this.autocomplete.bind(this)}
               onFocus={this.handleBreedFocus.bind(this)} />
             {
-              this.state.searchComplete.map((dog, i) => {
-                if(i < 5) {
-                  return (
-                    <div 
-                      key={dog}
-                      className="search-option" 
-                      data-val={dog}
-                      onClick={this.handleBreed.bind(this)}>{dog}</div>
-                  );
-                }
-              })
+              this.state.searchComplete.length > 0 &&
+                this.state.searchComplete.map((dog, i) => {
+                  if(i < 5) {
+                    return (
+                      <div 
+                        key={dog}
+                        className="search-option" 
+                        data-val={dog}
+                        onClick={this.handleBreed.bind(this)}>{dog}</div>
+                    );
+                  }
+                })
             }
           </div>
           <div className='select select-1' ref='age' onClick={this.firstClicked.bind(this)} data-val="Age">{this.state.age}
