@@ -48,6 +48,7 @@ class App extends Component {
       id : "",
       scrollPos : 0,
       errorClasses : "error",
+      errorClasses2: "error",
       data : [],
       users: this.getUserData(),
       loggedIn: false
@@ -579,7 +580,8 @@ class App extends Component {
     self.setState({
       dogs : [],
       loaderClasses : "loader",
-      errorClasses : "error"
+      errorClasses : "error",
+      errorClasses2: "error"
     });
     setTimeout(function(){
       self.setState({
@@ -739,12 +741,15 @@ class App extends Component {
             loaderClasses : "loader loader-hide",
             offset : offset + 24
           });
-        } else {
+        }
+        if(data.petfinder.pets.pet === undefined && self.state.dogs.length !== 0) {
           self.setState({
-            errorClasses : "error error-show",
+            errorClasses2: "error error-show",
             loaderClasses : "loader loader-hide",
             offset : offset
           });
+        } else {
+
         }
       }
     });
@@ -784,7 +789,8 @@ class App extends Component {
           loaderClasses={this.state.loaderClasses} 
           getMore={this.moreDogs.bind(this)} 
           showDog={this.showDog.bind(this)}
-          errorClasses={this.state.errorClasses} />
+          errorClasses={this.state.errorClasses}
+          errorClasses2={this.state.errorClasses2} />
 
         <Listing 
           classes={this.state.listingClasses}

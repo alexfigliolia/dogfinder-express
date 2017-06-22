@@ -42,6 +42,7 @@
 		overflow: hidden;
 		flex-wrap: wrap;
 		text-align: center;
+		padding-bottom: 20px;
 		@media #{$mq-800} {
 			width: 100%;
 		}
