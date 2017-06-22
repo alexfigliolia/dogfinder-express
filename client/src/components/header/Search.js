@@ -135,6 +135,7 @@ class Search extends Component {
               type='text' 
               placeholder="Breed" 
               onKeyPress={this.autocomplete.bind(this)}
+              onChange={this.autocomplete.bind(this)}
               onFocus={this.handleBreedFocus.bind(this)} />
             {
               this.state.searchComplete.map((dog, i) => {
