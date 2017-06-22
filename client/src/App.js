@@ -748,10 +748,15 @@ class App extends Component {
             loaderClasses : "loader loader-hide",
             offset : offset
           });
-        } else {
-
         }
-      }
+        if(data.petfinder.pets.pet === undefined && self.state.dogs.length === 0) {
+          self.setState({
+            errorClasses: "error error-show",
+            loaderClasses : "loader loader-hide",
+            offset : offset
+          });
+        } 
+      } 
     });
   }
 
