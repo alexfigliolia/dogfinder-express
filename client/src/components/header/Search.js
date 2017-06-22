@@ -134,7 +134,7 @@ class Search extends Component {
               ref='breed' 
               type='text' 
               placeholder="Breed" 
-              onChange={(evt) => this.autocomplete(evt)}
+              onInput={(evt) => this.autocomplete(evt)}
               onFocus={this.handleBreedFocus.bind(this)} />
             {
               this.state.searchComplete.length > 0 &&
