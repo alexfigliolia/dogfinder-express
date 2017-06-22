@@ -136,6 +136,7 @@ class Search extends Component {
               placeholder="Breed" 
               onKeyPress={this.autocomplete.bind(this)}
               onChange={this.autocomplete.bind(this)}
+              onKeyDown={this.autocomplete.bind(this)}
               onFocus={this.handleBreedFocus.bind(this)} />
             {
               this.state.searchComplete.length > 0 &&
