@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-class Banner extends Component {
-  render() {
+export default class Banner extends Component {
+  render = () => {
     return (
       <div className={this.props.classes} id='banner'>
       	<div className="center">
@@ -13,5 +13,3 @@ class Banner extends Component {
     );
   }
 }
-
-export default Banner;

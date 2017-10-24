@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import jsonp from 'jsonp';
 
-class Search extends Component {
+export default class Search extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -11,11 +11,12 @@ class Search extends Component {
       "soc" : true,
       "age" : "Age",
       "gender" :  "Gender",
-      "searchComplete" : []
+      "searchComplete" : [],
+      "breed": ""
     }
   }
 
-  handleBreed(e){
+  handleBreed = (e) => {
     var b = e.target.dataset.val;
     this.refs.breed.value = b;
     this.setState({
@@ -23,25 +24,25 @@ class Search extends Component {
     });
   }
 
-  handleBreedFocus(){
+  handleBreedFocus = () => {
     this.refs.breed.value = "";
     this.setState({
       searchComplete: []
     });
   }
 
-  handleInputs(){
-    var reg = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
-    var zip = this.refs.zipcode.value;
-    var breed = this.refs.breed.value;
+  handleInputs = () => {
+    const reg = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+    let zip = this.refs.zipcode.value;
+    let breed = this.refs.breed.value;
     if(breed === "") {
       breed = null;
     }
-    var age = this.state.age;
+    let age = this.state.age;
     if(age === "Age") {
       age = null;
     }
-    var gender = this.state.gender;
+    let gender = this.state.gender;
     if(gender === "Gender") {
       gender = null;
     }
@@ -58,7 +59,7 @@ class Search extends Component {
     }
   }
 
-  firstClicked(e){
+  firstClicked = (e) => {
     if(this.state.foc === true) {
       this.setState({
         "firstOptionClasses" : "options options-show",
@@ -73,7 +74,7 @@ class Search extends Component {
       });
     }
   }
-  secondClicked(e){
+  secondClicked = (e) => {
     if(this.state.soc === true) {
       this.setState({
         "secondOptionClasses" : "options options-show",
@@ -89,42 +90,41 @@ class Search extends Component {
     }
   }
 
-  //IMPLEMENTATION OF AUTOCOMPLETE FOR DOG BREEDS
-  autocomplete(){
-    var input = this.refs.breed.value,
-        string = input.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),
-        matches = [],
-        self = this;
-    // setInterval(function(){
-      if(string !== '') {
-        jsonp('https://api.petfinder.com/breed.list?animal=dog&format=json&key=30ee8287679b46176ef7acfbfee70f33', null, function(err, data){
-          if(err) {
-            console.log(err);
-          } else {
-            var breeds = data.petfinder.breeds.breed;
-            for(var i = 0; i < breeds.length; i++) {
-                var b = breeds[i].$t;
-                if(b.toLowerCase().indexOf(string) === 0) {
-                  matches.unshift(b);
-                } 
-                if(b.toLowerCase().indexOf(string) !== 0 && b.toLowerCase().indexOf(string) !== -1) {
-                  matches.push(b);
-                }
-            }
-            self.setState({
-              searchComplete: matches
-            });
-          }
-        });
-      } else {
-        self.setState({
-          searchComplete: []
-        });
-      }
-    // }, 500); 
+  breedState = (e) => {
+    var b = e.target.value;
+    this.setState({ breed: b });
+    this.autocomplete(b)
   }
 
-  render() {
+  //IMPLEMENTATION OF AUTOCOMPLETE FOR DOG BREEDS
+  autocomplete = (b) => {
+    let input = b;
+    let string = input.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    let matches = [];
+    if(string !== '') {
+      jsonp('https://api.petfinder.com/breed.list?animal=dog&format=json&key=30ee8287679b46176ef7acfbfee70f33', null, (err, data) => {
+        if(err) {
+          console.log(err);
+        } else {
+          var breeds = data.petfinder.breeds.breed;
+          for(let i = 0; i < breeds.length; i++) {
+            const b = breeds[i].$t;
+            if(b.toLowerCase().indexOf(string) === 0) {
+              matches.unshift(b);
+            } 
+            if(b.toLowerCase().indexOf(string) !== 0 && b.toLowerCase().indexOf(string) !== -1) {
+              matches.push(b);
+            }
+          }
+          this.setState({ searchComplete: matches });
+        }
+      });
+    } else {
+      this.setState({ searchComplete: [] });
+    }
+  }
+
+  render = () => {
     return (
       <div className={this.props.classes}>
         <div>
@@ -134,8 +134,8 @@ class Search extends Component {
               ref='breed' 
               type='text' 
               placeholder="Breed" 
-              onChange={(evt) => this.autocomplete(evt)}
-              onFocus={this.handleBreedFocus.bind(this)} />
+              onChange={this.breedState}
+              onFocus={this.handleBreedFocus} />
             {
               this.state.searchComplete.length > 0 &&
                 this.state.searchComplete.map((dog, i) => {
@@ -145,13 +145,13 @@ class Search extends Component {
                         key={dog}
                         className="search-option" 
                         data-val={dog}
-                        onClick={this.handleBreed.bind(this)}>{dog}</div>
+                        onClick={this.handleBreed}>{dog}</div>
                     );
                   }
                 })
             }
           </div>
-          <div className='select select-1' ref='age' onClick={this.firstClicked.bind(this)} data-val="Age">{this.state.age}
+          <div className='select select-1' ref='age' onClick={this.firstClicked} data-val="Age">{this.state.age}
             <div className={this.state.firstOptionClasses} >
               <div className='option' data-val="Age">Age</div> 
               <div className='option' data-val="Baby">Baby</div>
@@ -160,18 +160,16 @@ class Search extends Component {
               <div className='option' data-val="Senior">Senior</div>
             </div>
           </div>
-          <div className='select select-2' ref='gender' onClick={this.secondClicked.bind(this)} data-val="Gender">{this.state.gender}
+          <div className='select select-2' ref='gender' onClick={this.secondClicked} data-val="Gender">{this.state.gender}
             <div className={this.state.secondOptionClasses}>
               <div className='option' data-val="Gender">Gender</div>
               <div className='option' data-val="M">Male</div>
               <div className='option' data-val="F">Female</div>
             </div>
           </div>
-          <button onClick={this.handleInputs.bind(this)}>SEARCH</button>
+          <button onClick={this.handleInputs}>SEARCH</button>
         </div>
       </div>
     );
   }
 }
-
-export default Search;

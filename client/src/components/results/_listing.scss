@@ -13,6 +13,7 @@
 	transition-duration: 0.4s;
 	overflow-x: hidden;
 	text-align: center;
+	-webkit-overflow-scrolling: touch;
 	transition-delay: 0.3s;
 	@media #{$mq-800} {
 		top: 80px;
@@ -152,6 +153,7 @@
 				height: 50px;
 				border-radius: 50%;
 				margin-left: 65px;
+				color: transparent;
 				&::after {
 					transform: scale(1);
 					transition-delay: 0.15s;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Compare extends Component {
+export default class Compare extends Component {
   render() {
     return (
       <div className={this.props.classes} id="compare">
@@ -8,7 +8,7 @@ class Compare extends Component {
           <h1>Compare Pups</h1>
           <div className='cc'>
             {
-              this.props.savedDogs.map(function(dog, i){
+              this.props.savedDogs.map((dog, i) => {
                 return (
                   <div className='dog-to-compare' key={i}>
                     <div className="ccimage">
@@ -35,5 +35,3 @@ class Compare extends Component {
     );
   }
 }
-
-export default Compare;

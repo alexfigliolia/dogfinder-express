@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-class DogItem extends Component {
-  render() {
+export default class DogItem extends Component {
+  render = () => {
     return (
       <div className="saved-dog" key={this.props.key} data-id={this.props.dataid}>
   		<button onClick={this.props.removeDog}>X</button>
@@ -10,5 +10,3 @@ class DogItem extends Component {
     );
   }
 }
-
-export default DogItem;

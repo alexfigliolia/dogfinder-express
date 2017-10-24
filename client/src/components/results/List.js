@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Dogs from './Dogs.js';
 
-class List extends Component {
-	render() {
+export default class List extends Component {
+	render = () => {
 		return(
 			<div className={this.props.classes} id='list'>
 				<h1>Search Results</h1>
@@ -22,5 +22,3 @@ class List extends Component {
 		);
 	}
 }
-
-export default List;

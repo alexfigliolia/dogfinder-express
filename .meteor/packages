@@ -21,3 +21,4 @@ accounts-password
 fourseven:scss
 seba:minifiers-autoprefixer
 force-ssl
+react-meteor-data

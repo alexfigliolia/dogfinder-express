@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-class Dog extends Component {
+export default class Dog extends Component {
+
 	componentDidMount(){
-	  	var m = document.getElementsByClassName('dog');
-		for ( var i=0; i < m.length; i++ ) {
+	  const m = document.getElementsByClassName('dog');
+		for ( let i=0; i < m.length; i++ ) {
 		    // get function in closure, so i can iterate
-		    var toggleItemMove = this.toggleMove( i );
+		    const toggleItemMove = this.toggleMove( i );
 		    // reverse stagger order
-		    var delay = i + 1;
+		    let delay = i + 1;
 		    delay *= 30;
 		    // stagger transition with setTimeout
 		    setTimeout( toggleItemMove, delay );
@@ -15,23 +16,23 @@ class Dog extends Component {
 	}
 
 	toggleMove(i){
-	  	var m = document.getElementsByClassName('dog');
-	  	var item = m[i];
+	  	const m = document.getElementsByClassName('dog');
+	  	let item = m[i];
 	  	return function() {
 		    item.classList.add('dog-show');
 		}
 	}
 
 	componentWillUnmount(){
-	  	var m = document.getElementsByClassName('dog');
-	  	for (var i = 0; i < m.length; i++) {
+	  	const m = document.getElementsByClassName('dog');
+	  	for (let i = 0; i < m.length; i++) {
 	      return function() {
 	        m[i].classList.remove('dog-show');
 	      }
 	    }
 	}
 
-	render() {
+	render = () => {
 		return(
 			<div className="dog" data-index={this.props.index}>
 				<div className='image'>
@@ -46,5 +47,3 @@ class Dog extends Component {
 		);
 	}
 }
-
-export default Dog;

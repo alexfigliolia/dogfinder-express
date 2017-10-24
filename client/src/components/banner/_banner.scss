@@ -34,12 +34,18 @@ body{
 	 	@media #{$mq-957} {
 	 		margin-left: 10%;
 	 	}
+	 	@media #{$mq-1700} {
+	 		max-width: 900px;
+	 	}
 	 	&>h2 {
 	 		font-size: 7vh;
 	 		font-weight: 200;
 	 		margin-bottom: 0.25em;
 	 		text-align: center;
 	 		color: #000;
+	 		@media #{$mq-h-1400} {
+		 		font-size: 6vh;
+		 	}
 	 	}
  		&>button {
 	 		width: 180px;

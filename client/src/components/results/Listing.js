@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Listing extends Component {
+export default class Listing extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -9,8 +9,8 @@ class Listing extends Component {
     }
   }
 
-  inquire(){
-    var to = this.props.email;
+  inquire = () => {
+    const to = this.props.email;
     window.location.href = "mailto:"+to+"?subject=Subject&body=Hello, I would like to inquire about this dog";
   }
 
@@ -28,7 +28,7 @@ class Listing extends Component {
     }
   }
 
-  render() {
+  render = () => {
     return (
       <div className={this.props.classes} id='listing'>
         <div className='name-facts'>
@@ -57,5 +57,3 @@ class Listing extends Component {
     );
   }
 }
-
-export default Listing;
